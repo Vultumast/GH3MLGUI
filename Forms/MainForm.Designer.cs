@@ -49,6 +49,9 @@
             linkLabel2 = new LinkLabel();
             linkLabel1 = new LinkLabel();
             tabPage1 = new TabPage();
+            openConsoleCheckBox = new CheckBox();
+            allowQScriptPrintfCheckBox = new CheckBox();
+            updatedNoteTypesCheckBox = new CheckBox();
             groupBox2 = new GroupBox();
             label5 = new Label();
             label3 = new Label();
@@ -68,6 +71,8 @@
             commonToolTip = new ToolTip(components);
             button1 = new Button();
             launchButton = new Button();
+            logLevelComboBox = new ComboBox();
+            label6 = new Label();
             descriptionGroupBox.SuspendLayout();
             mainTabControl.SuspendLayout();
             modsTabPage.SuspendLayout();
@@ -292,6 +297,11 @@
             // 
             // tabPage1
             // 
+            tabPage1.Controls.Add(label6);
+            tabPage1.Controls.Add(logLevelComboBox);
+            tabPage1.Controls.Add(openConsoleCheckBox);
+            tabPage1.Controls.Add(allowQScriptPrintfCheckBox);
+            tabPage1.Controls.Add(updatedNoteTypesCheckBox);
             tabPage1.Controls.Add(groupBox2);
             tabPage1.Controls.Add(groupBox1);
             tabPage1.Location = new Point(4, 25);
@@ -301,6 +311,39 @@
             tabPage1.TabIndex = 2;
             tabPage1.Text = "Game Options";
             tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // openConsoleCheckBox
+            // 
+            openConsoleCheckBox.AutoSize = true;
+            openConsoleCheckBox.Location = new Point(25, 219);
+            openConsoleCheckBox.Name = "openConsoleCheckBox";
+            openConsoleCheckBox.Size = new Size(100, 20);
+            openConsoleCheckBox.TabIndex = 12;
+            openConsoleCheckBox.Text = "Open Console";
+            commonToolTip.SetToolTip(openConsoleCheckBox, "Opens a console window");
+            openConsoleCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // allowQScriptPrintfCheckBox
+            // 
+            allowQScriptPrintfCheckBox.AutoSize = true;
+            allowQScriptPrintfCheckBox.Location = new Point(25, 245);
+            allowQScriptPrintfCheckBox.Name = "allowQScriptPrintfCheckBox";
+            allowQScriptPrintfCheckBox.Size = new Size(130, 20);
+            allowQScriptPrintfCheckBox.TabIndex = 11;
+            allowQScriptPrintfCheckBox.Text = "Allow QScript Printf";
+            commonToolTip.SetToolTip(allowQScriptPrintfCheckBox, "Allow printing of \"Printf\" in QScript");
+            allowQScriptPrintfCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // updatedNoteTypesCheckBox
+            // 
+            updatedNoteTypesCheckBox.AutoSize = true;
+            updatedNoteTypesCheckBox.Location = new Point(71, 292);
+            updatedNoteTypesCheckBox.Name = "updatedNoteTypesCheckBox";
+            updatedNoteTypesCheckBox.Size = new Size(132, 20);
+            updatedNoteTypesCheckBox.TabIndex = 10;
+            updatedNoteTypesCheckBox.Text = "Updated Note Types";
+            commonToolTip.SetToolTip(updatedNoteTypesCheckBox, "Adds Tap-Notes, HOPO Chords, Open Strums");
+            updatedNoteTypesCheckBox.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 
@@ -410,6 +453,7 @@
             // 
             windowStyleComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             windowStyleComboBox.FormattingEnabled = true;
+            windowStyleComboBox.Items.AddRange(new object[] { "Fullscreen", "Windowed", "Borderless Windowed", "Borderless Fullscreen" });
             windowStyleComboBox.Location = new Point(6, 22);
             windowStyleComboBox.Name = "windowStyleComboBox";
             windowStyleComboBox.Size = new Size(170, 24);
@@ -505,6 +549,25 @@
             launchButton.UseVisualStyleBackColor = true;
             launchButton.Click += launchButton_Click;
             // 
+            // logLevelComboBox
+            // 
+            logLevelComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            logLevelComboBox.FormattingEnabled = true;
+            logLevelComboBox.Items.AddRange(new object[] { "None", "Trace", "Debug", "Info", "Warn", "Error" });
+            logLevelComboBox.Location = new Point(232, 215);
+            logLevelComboBox.Name = "logLevelComboBox";
+            logLevelComboBox.Size = new Size(170, 24);
+            logLevelComboBox.TabIndex = 13;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(142, 220);
+            label6.Name = "label6";
+            label6.Size = new Size(60, 16);
+            label6.TabIndex = 14;
+            label6.Text = "Log Level:";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 16F);
@@ -523,6 +586,7 @@
             tabPage2.ResumeLayout(false);
             tabPage2.PerformLayout();
             tabPage1.ResumeLayout(false);
+            tabPage1.PerformLayout();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown3).EndInit();
@@ -576,5 +640,10 @@
         private ComboBox windowStyleComboBox;
         private CheckBox resizableCheckBox;
         private Label label5;
+        private CheckBox openConsoleCheckBox;
+        private CheckBox allowQScriptPrintfCheckBox;
+        private CheckBox updatedNoteTypesCheckBox;
+        private ComboBox logLevelComboBox;
+        private Label label6;
     }
 }

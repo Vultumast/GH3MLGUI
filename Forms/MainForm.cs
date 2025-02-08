@@ -65,9 +65,6 @@ public partial class MainForm : Form
 
         removeModButton.Enabled = false;
 
-        foreach (var value in Enum.GetNames(typeof(WindowStyle)))
-            windowStyleComboBox.Items.Add(value);
-
         windowStyleComboBox.SelectedIndex = (int)Program.Settings.WindowStyle;
 
         windowResolutionXNumericUpDown.Value = Program.Settings.WindowSize.Width;
