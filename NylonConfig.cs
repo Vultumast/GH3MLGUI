@@ -8,6 +8,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.CodeDom;
 
+using static GH3MLGUI.Common.Directories;
+
 namespace GH3MLGUI;
 
 public enum LogTypes
@@ -19,7 +21,7 @@ public enum LogTypes
     Warn,
     Error,
 }
-public enum WindowStyles
+public enum WindowStyle
 {
     Fullscreen,
     Windowed,
@@ -27,7 +29,7 @@ public enum WindowStyles
     BorderlessFullscreen
 }
 
-public class GH3MLSettings
+public class NylonConfig
 {
     [JsonPropertyName("openGH3Console")]
     public bool OpenGH3Console { get; set; } = true;
@@ -36,15 +38,21 @@ public class GH3MLSettings
     public bool AllowQScriptPrintf { get; set; } = true;
 
     [JsonPropertyName("windowStyle")]
-    public WindowStyles WindowStyle { get; set; } = WindowStyles.Windowed;
+    public WindowStyle WindowStyle { get; set; } = WindowStyle.Windowed;
 
     [JsonPropertyName("pluginLogType")]
     public LogTypes ModLogType { get; set; } = LogTypes.Trace;
 
+    [JsonPropertyName("vsync")]
+    public bool VSync { get; set; } = true;
+
+    [JsonPropertyName("windowSize")]
+    public Size WindowSize { get; set; } = new Size(1920, 1080);
+
     public string[] EnabledMods { get; set; } = Array.Empty<string>();
 
-    public static GH3MLSettings Read() => JsonSerializer.Deserialize<GH3MLSettings>(File.ReadAllText(Path.Combine(Program.GameGH3MLDirectory, "config.json")))!;
+    public static NylonConfig Read() => JsonSerializer.Deserialize<NylonConfig>(File.ReadAllText(Path.Combine(GH3Directory, "config.json")))!;
   
-    public static void Write(GH3MLSettings settings) => File.WriteAllText(Path.Combine(Program.GameGH3MLDirectory, "config.json"), JsonSerializer.Serialize(settings, new JsonSerializerOptions() { WriteIndented = true }));
+    public static void Write(NylonConfig settings) => File.WriteAllText(Path.Combine(GH3Directory, "config.json"), JsonSerializer.Serialize(settings, new JsonSerializerOptions() { WriteIndented = true }));
     
 }

@@ -77,9 +77,9 @@ namespace GH3MLGUI
         /// <summary>
         /// The window style that will be used
         /// </summary>
-        public WindowStyles WindowStyle
+        public WindowStyle WindowStyle
         {
-            get => (WindowStyles)windowStyleComboBox.SelectedIndex;
+            get => (WindowStyle)windowStyleComboBox.SelectedIndex;
             set => windowStyleComboBox.SelectedIndex = (int)value;
         }
     }
