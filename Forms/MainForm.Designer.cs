@@ -191,6 +191,7 @@
             // editButton
             // 
             editButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            editButton.Enabled = false;
             editButton.Image = Properties.Resources.EditInput_16x;
             editButton.Location = new Point(501, 167);
             editButton.Name = "editButton";
@@ -621,8 +622,8 @@
             // 
             infoTextToolStripLabel.Alignment = ToolStripItemAlignment.Right;
             infoTextToolStripLabel.Name = "infoTextToolStripLabel";
-            infoTextToolStripLabel.Size = new Size(147, 22);
-            infoTextToolStripLabel.Text = "Loader: v1.0.0a GUI: v1.0.0a";
+            infoTextToolStripLabel.Size = new Size(161, 22);
+            infoTextToolStripLabel.Text = "Loader: vX.X.X.x GUI: vX.X.X.x";
             // 
             // MainForm
             // 
