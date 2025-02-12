@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Text;
@@ -47,19 +48,25 @@ public class ModInfo
     [JsonPropertyName("updateLink")]
     public string UpdateLink { get; set; } = "";
 
-    [JsonPropertyName("paksToLoad")]
+    /* [JsonPropertyName("paksToLoad")]
     public string[] PaksToLoad { get; set; } = Array.Empty<string>();
 
     [JsonPropertyName("paksToReplace")]
-    public Dictionary<string, string> PaksToReplace { get; set; } = new Dictionary<string, string>();
+    public Dictionary<string, string> PaksToReplace { get; set; } = new Dictionary<string, string>(); */
+
 
     [JsonPropertyName("tags")]
     public ModTag Tags { get; set; } = ModTag.Unspecified;
-    public static bool TryRead(string path, out ModInfo? info)
+
+    [JsonIgnore]
+    public string Directory { get; private set; } = string.Empty;
+
+    public static bool TryRead(string path, [NotNullWhen(true)] out ModInfo? info)
     {
         try
         {
             info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(path))!;
+            info.Directory = Path.GetDirectoryName(path);
             return true;
         }
         catch (Exception ex)
@@ -69,8 +76,17 @@ public class ModInfo
             return false;
         }
     }
-    public static ModInfo Read(string path) => JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(path))!;
-   
-    public static void Write(ModInfo settings, string directory) => File.WriteAllText(Path.Combine(directory, "modinfo.json"), JsonSerializer.Serialize(settings, new JsonSerializerOptions() { WriteIndented = true }));
+    public static ModInfo Read(string path)
+    {
+        var info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(path))!;
+        info.Directory = Path.GetDirectoryName(path);
+        return info;
+    }
+
+    public static void Write(ModInfo settings, string directory)
+    {
+        File.WriteAllText(Path.Combine(directory, "modinfo.json"), JsonSerializer.Serialize(settings, new JsonSerializerOptions() { WriteIndented = true }));
+        settings.Directory = directory;
+    }
     
 }

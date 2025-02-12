@@ -104,6 +104,8 @@
             tagsCheckedListBox.Name = "tagsCheckedListBox";
             tagsCheckedListBox.Size = new Size(385, 135);
             tagsCheckedListBox.TabIndex = 6;
+            tagsCheckedListBox.ItemCheck += tagsCheckedListBox_ItemCheck;
+            tagsCheckedListBox.SelectedIndexChanged += tagsCheckedListBox_SelectedIndexChanged;
             // 
             // descriptionTextBox
             // 

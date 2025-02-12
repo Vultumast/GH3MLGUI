@@ -24,7 +24,8 @@ public enum ErrorCode
 }
 internal static class Program
 {
-    
+    public static bool IsDebugMode => System.Diagnostics.Debugger.IsAttached;
+
     public static string GuitarHero3SaveDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Aspyr\\Guitar Hero III\\");
     public static string VersionString => System.Reflection.Assembly.GetExecutingAssembly().GetName().Version!.ToString();
     public static NylonConfig Settings { get; private set; } = new();
@@ -76,26 +77,9 @@ internal static class Program
     [STAThread]
     static int Main(string[] args)
     {
-        /*var octokitclient = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("gh3mlgui"));
-        IReadOnlyList<Octokit.Release> releases = octokitclient.Repository.Release.GetAll("Vultumast", "gh3ml").Result;
+        TemporaryManager.Init();
 
-        foreach (var release in releases)
-        {
-            Console.WriteLine(release.Name);
-            using (var client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("ghmlgui", "1"));
-
-                using (var s = client.GetStreamAsync(release.ZipballUrl))
-                {
-                    using (var fs = new FileStream("release.zip", FileMode.OpenOrCreate))
-                    {
-                        s.Result.CopyTo(fs);
-                    }
-                }
-            }
-        }*/
-
+        Application.ApplicationExit += Application_ApplicationExit;
         if (!CanWriteToGH3Directory())
         {
             if (DisplayError("Your Guitar Hero 3 directory does not have Anonymous access rights, would you like them to be enabled?", MessageBoxButtons.YesNo) == DialogResult.Yes)
@@ -113,12 +97,15 @@ internal static class Program
 
         if (args.Length == 0)
         {
-            if (CheckPathExists(ModLoaderDirectory))
+            if (!CheckPathExists(ModLoaderDirectory))
                 Directory.CreateDirectory(ModLoaderDirectory);
+
+            if (!CheckPathExists(ModsDirectory))
+                Directory.CreateDirectory(ModsDirectory);
 
             var configPath = Path.Combine(ModLoaderDirectory, "config.json");
 
-            if (!CheckPathExists(configPath) && CheckPathExists(Path.Combine(GH3Directory, "nylon.dll")))
+            if (!CheckPathExists(configPath))
                 NylonConfig.Write(Settings);
 
             Settings = NylonConfig.Read();
@@ -137,8 +124,9 @@ internal static class Program
 
     }
 
-    private static void Program_OutputDataReceived(object sender, DataReceivedEventArgs e)
+    private static void Application_ApplicationExit(object? sender, EventArgs e)
     {
-
+        TemporaryManager.Cleanup();
     }
+
 }

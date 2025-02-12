@@ -29,15 +29,17 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             modsListView = new ListView();
             nameColumHeader = new ColumnHeader();
             authorColumnHeader = new ColumnHeader();
             versionColumnHeader = new ColumnHeader();
             tagsColumnHeader = new ColumnHeader();
-            textBox1 = new TextBox();
+            descriptionTextBox = new TextBox();
             descriptionGroupBox = new GroupBox();
             mainTabControl = new TabControl();
             modsTabPage = new TabPage();
+            editButton = new Button();
             refreshModListButton = new Button();
             moveModToBottomButton = new Button();
             moveModDownButton = new Button();
@@ -49,6 +51,8 @@
             linkLabel2 = new LinkLabel();
             linkLabel1 = new LinkLabel();
             tabPage1 = new TabPage();
+            label6 = new Label();
+            logLevelComboBox = new ComboBox();
             openConsoleCheckBox = new CheckBox();
             allowQScriptPrintfCheckBox = new CheckBox();
             updatedNoteTypesCheckBox = new CheckBox();
@@ -69,10 +73,12 @@
             vsyncCheckBox = new CheckBox();
             label1 = new Label();
             commonToolTip = new ToolTip(components);
-            button1 = new Button();
+            saveButton = new Button();
             launchButton = new Button();
-            logLevelComboBox = new ComboBox();
-            label6 = new Label();
+            toolStrip1 = new ToolStrip();
+            toolStripButton1 = new ToolStripButton();
+            checkForUpdatesToolStripButton = new ToolStripButton();
+            infoTextToolStripLabel = new ToolStripLabel();
             descriptionGroupBox.SuspendLayout();
             mainTabControl.SuspendLayout();
             modsTabPage.SuspendLayout();
@@ -85,6 +91,7 @@
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)windowResolutionXNumericUpDown).BeginInit();
             ((System.ComponentModel.ISupportInitialize)windowResolutionYNumericUpDown).BeginInit();
+            toolStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // modsListView
@@ -98,10 +105,11 @@
             modsListView.MultiSelect = false;
             modsListView.Name = "modsListView";
             modsListView.ShowItemToolTips = true;
-            modsListView.Size = new Size(489, 264);
+            modsListView.Size = new Size(489, 248);
             modsListView.TabIndex = 0;
             modsListView.UseCompatibleStateImageBehavior = false;
             modsListView.View = View.Details;
+            modsListView.ItemChecked += modsListView_ItemChecked;
             modsListView.SelectedIndexChanged += modsListView_SelectedIndexChanged;
             // 
             // nameColumHeader
@@ -127,21 +135,21 @@
             tagsColumnHeader.TextAlign = HorizontalAlignment.Center;
             tagsColumnHeader.Width = 100;
             // 
-            // textBox1
+            // descriptionTextBox
             // 
-            textBox1.Dock = DockStyle.Fill;
-            textBox1.Location = new Point(3, 19);
-            textBox1.Multiline = true;
-            textBox1.Name = "textBox1";
-            textBox1.ReadOnly = true;
-            textBox1.Size = new Size(513, 78);
-            textBox1.TabIndex = 1;
+            descriptionTextBox.Dock = DockStyle.Fill;
+            descriptionTextBox.Location = new Point(3, 19);
+            descriptionTextBox.Multiline = true;
+            descriptionTextBox.Name = "descriptionTextBox";
+            descriptionTextBox.ReadOnly = true;
+            descriptionTextBox.Size = new Size(513, 78);
+            descriptionTextBox.TabIndex = 1;
             // 
             // descriptionGroupBox
             // 
             descriptionGroupBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            descriptionGroupBox.Controls.Add(textBox1);
-            descriptionGroupBox.Location = new Point(6, 273);
+            descriptionGroupBox.Controls.Add(descriptionTextBox);
+            descriptionGroupBox.Location = new Point(6, 257);
             descriptionGroupBox.Name = "descriptionGroupBox";
             descriptionGroupBox.Size = new Size(519, 100);
             descriptionGroupBox.TabIndex = 2;
@@ -154,14 +162,15 @@
             mainTabControl.Controls.Add(modsTabPage);
             mainTabControl.Controls.Add(tabPage2);
             mainTabControl.Controls.Add(tabPage1);
-            mainTabControl.Location = new Point(12, 12);
+            mainTabControl.Location = new Point(12, 28);
             mainTabControl.Name = "mainTabControl";
             mainTabControl.SelectedIndex = 0;
-            mainTabControl.Size = new Size(539, 408);
+            mainTabControl.Size = new Size(539, 392);
             mainTabControl.TabIndex = 4;
             // 
             // modsTabPage
             // 
+            modsTabPage.Controls.Add(editButton);
             modsTabPage.Controls.Add(refreshModListButton);
             modsTabPage.Controls.Add(moveModToBottomButton);
             modsTabPage.Controls.Add(moveModDownButton);
@@ -174,14 +183,26 @@
             modsTabPage.Location = new Point(4, 25);
             modsTabPage.Name = "modsTabPage";
             modsTabPage.Padding = new Padding(3);
-            modsTabPage.Size = new Size(531, 379);
+            modsTabPage.Size = new Size(531, 363);
             modsTabPage.TabIndex = 0;
             modsTabPage.Text = "Mods";
             modsTabPage.UseVisualStyleBackColor = true;
             // 
+            // editButton
+            // 
+            editButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            editButton.Image = Properties.Resources.EditInput_16x;
+            editButton.Location = new Point(501, 167);
+            editButton.Name = "editButton";
+            editButton.Size = new Size(24, 24);
+            editButton.TabIndex = 10;
+            commonToolTip.SetToolTip(editButton, "Edit Mod Info");
+            editButton.UseVisualStyleBackColor = true;
+            editButton.Click += editButton_Click;
+            // 
             // refreshModListButton
             // 
-            refreshModListButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            refreshModListButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             refreshModListButton.Image = Properties.Resources.Refresh_16x;
             refreshModListButton.Location = new Point(501, 6);
             refreshModListButton.Name = "refreshModListButton";
@@ -219,7 +240,7 @@
             // 
             removeModButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             removeModButton.Image = Properties.Resources.Remove_16x;
-            removeModButton.Location = new Point(501, 243);
+            removeModButton.Location = new Point(501, 227);
             removeModButton.Name = "removeModButton";
             removeModButton.Size = new Size(24, 24);
             removeModButton.TabIndex = 7;
@@ -231,7 +252,7 @@
             // 
             addModButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             addModButton.Image = Properties.Resources.Add_16x;
-            addModButton.Location = new Point(501, 213);
+            addModButton.Location = new Point(501, 197);
             addModButton.Name = "addModButton";
             addModButton.Size = new Size(24, 24);
             addModButton.TabIndex = 7;
@@ -270,7 +291,7 @@
             tabPage2.Location = new Point(4, 25);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(531, 379);
+            tabPage2.Size = new Size(531, 363);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "Mod Loader";
             tabPage2.UseVisualStyleBackColor = true;
@@ -307,10 +328,29 @@
             tabPage1.Location = new Point(4, 25);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(531, 379);
+            tabPage1.Size = new Size(531, 363);
             tabPage1.TabIndex = 2;
             tabPage1.Text = "Game Options";
             tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(142, 220);
+            label6.Name = "label6";
+            label6.Size = new Size(60, 16);
+            label6.TabIndex = 14;
+            label6.Text = "Log Level:";
+            // 
+            // logLevelComboBox
+            // 
+            logLevelComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            logLevelComboBox.FormattingEnabled = true;
+            logLevelComboBox.Items.AddRange(new object[] { "None", "Trace", "Debug", "Info", "Warn", "Error" });
+            logLevelComboBox.Location = new Point(232, 215);
+            logLevelComboBox.Name = "logLevelComboBox";
+            logLevelComboBox.Size = new Size(170, 24);
+            logLevelComboBox.TabIndex = 13;
             // 
             // openConsoleCheckBox
             // 
@@ -337,7 +377,7 @@
             // updatedNoteTypesCheckBox
             // 
             updatedNoteTypesCheckBox.AutoSize = true;
-            updatedNoteTypesCheckBox.Location = new Point(71, 292);
+            updatedNoteTypesCheckBox.Location = new Point(25, 271);
             updatedNoteTypesCheckBox.Name = "updatedNoteTypesCheckBox";
             updatedNoteTypesCheckBox.Size = new Size(132, 20);
             updatedNoteTypesCheckBox.TabIndex = 10;
@@ -528,16 +568,17 @@
             label1.TabIndex = 1;
             label1.Text = "Resolution:";
             // 
-            // button1
+            // saveButton
             // 
-            button1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            button1.Image = Properties.Resources.Save_16x;
-            button1.Location = new Point(527, 426);
-            button1.Name = "button1";
-            button1.Size = new Size(24, 24);
-            button1.TabIndex = 8;
-            commonToolTip.SetToolTip(button1, "Add a new mod");
-            button1.UseVisualStyleBackColor = true;
+            saveButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            saveButton.Image = Properties.Resources.Save_16x;
+            saveButton.Location = new Point(527, 426);
+            saveButton.Name = "saveButton";
+            saveButton.Size = new Size(24, 24);
+            saveButton.TabIndex = 8;
+            commonToolTip.SetToolTip(saveButton, "Add a new mod");
+            saveButton.UseVisualStyleBackColor = true;
+            saveButton.Click += saveButton_Click;
             // 
             // launchButton
             // 
@@ -549,31 +590,47 @@
             launchButton.UseVisualStyleBackColor = true;
             launchButton.Click += launchButton_Click;
             // 
-            // logLevelComboBox
+            // toolStrip1
             // 
-            logLevelComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            logLevelComboBox.FormattingEnabled = true;
-            logLevelComboBox.Items.AddRange(new object[] { "None", "Trace", "Debug", "Info", "Warn", "Error" });
-            logLevelComboBox.Location = new Point(232, 215);
-            logLevelComboBox.Name = "logLevelComboBox";
-            logLevelComboBox.Size = new Size(170, 24);
-            logLevelComboBox.TabIndex = 13;
+            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripButton1, checkForUpdatesToolStripButton, infoTextToolStripLabel });
+            toolStrip1.Location = new Point(0, 0);
+            toolStrip1.Name = "toolStrip1";
+            toolStrip1.Size = new Size(563, 25);
+            toolStrip1.TabIndex = 9;
+            toolStrip1.Text = "toolStrip";
             // 
-            // label6
+            // toolStripButton1
             // 
-            label6.AutoSize = true;
-            label6.Location = new Point(142, 220);
-            label6.Name = "label6";
-            label6.Size = new Size(60, 16);
-            label6.TabIndex = 14;
-            label6.Text = "Log Level:";
+            toolStripButton1.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            toolStripButton1.Image = (Image)resources.GetObject("toolStripButton1.Image");
+            toolStripButton1.ImageTransparentColor = Color.Magenta;
+            toolStripButton1.Name = "toolStripButton1";
+            toolStripButton1.Size = new Size(81, 22);
+            toolStripButton1.Text = "Install Loader";
+            // 
+            // checkForUpdatesToolStripButton
+            // 
+            checkForUpdatesToolStripButton.Image = Properties.Resources.StatusUpdate_16x;
+            checkForUpdatesToolStripButton.ImageTransparentColor = Color.Magenta;
+            checkForUpdatesToolStripButton.Name = "checkForUpdatesToolStripButton";
+            checkForUpdatesToolStripButton.Size = new Size(125, 22);
+            checkForUpdatesToolStripButton.Text = "Check For Updates";
+            checkForUpdatesToolStripButton.Click += checkForUpdatesToolStripButton_Click;
+            // 
+            // infoTextToolStripLabel
+            // 
+            infoTextToolStripLabel.Alignment = ToolStripItemAlignment.Right;
+            infoTextToolStripLabel.Name = "infoTextToolStripLabel";
+            infoTextToolStripLabel.Size = new Size(147, 22);
+            infoTextToolStripLabel.Text = "Loader: v1.0.0a GUI: v1.0.0a";
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 16F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(563, 461);
-            Controls.Add(button1);
+            Controls.Add(toolStrip1);
+            Controls.Add(saveButton);
             Controls.Add(launchButton);
             Controls.Add(mainTabControl);
             Name = "MainForm";
@@ -596,7 +653,10 @@
             groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)windowResolutionXNumericUpDown).EndInit();
             ((System.ComponentModel.ISupportInitialize)windowResolutionYNumericUpDown).EndInit();
+            toolStrip1.ResumeLayout(false);
+            toolStrip1.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -606,7 +666,7 @@
         private ColumnHeader authorColumnHeader;
         private ColumnHeader versionColumnHeader;
         private ColumnHeader tagsColumnHeader;
-        private TextBox textBox1;
+        private TextBox descriptionTextBox;
         private GroupBox descriptionGroupBox;
         private TabControl mainTabControl;
         private TabPage modsTabPage;
@@ -634,7 +694,7 @@
         private NumericUpDown windowResolutionXNumericUpDown;
         private NumericUpDown windowResolutionYNumericUpDown;
         private Label label4;
-        private Button button1;
+        private Button saveButton;
         private LinkLabel linkLabel2;
         private LinkLabel linkLabel1;
         private ComboBox windowStyleComboBox;
@@ -645,5 +705,10 @@
         private CheckBox updatedNoteTypesCheckBox;
         private ComboBox logLevelComboBox;
         private Label label6;
+        private ToolStrip toolStrip1;
+        private ToolStripButton toolStripButton1;
+        private ToolStripButton checkForUpdatesToolStripButton;
+        private ToolStripLabel infoTextToolStripLabel;
+        private Button editButton;
     }
 }
