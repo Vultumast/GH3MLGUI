@@ -79,6 +79,7 @@
             toolStripButton1 = new ToolStripButton();
             checkForUpdatesToolStripButton = new ToolStripButton();
             infoTextToolStripLabel = new ToolStripLabel();
+            toolStripButton2 = new ToolStripButton();
             descriptionGroupBox.SuspendLayout();
             mainTabControl.SuspendLayout();
             modsTabPage.SuspendLayout();
@@ -593,7 +594,7 @@
             // 
             // toolStrip1
             // 
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripButton1, checkForUpdatesToolStripButton, infoTextToolStripLabel });
+            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripButton1, checkForUpdatesToolStripButton, infoTextToolStripLabel, toolStripButton2 });
             toolStrip1.Location = new Point(0, 0);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new Size(563, 25);
@@ -625,6 +626,15 @@
             infoTextToolStripLabel.Size = new Size(161, 22);
             infoTextToolStripLabel.Text = "Loader: vX.X.X.x GUI: vX.X.X.x";
             // 
+            // toolStripButton2
+            // 
+            toolStripButton2.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton2.Image = (Image)resources.GetObject("toolStripButton2.Image");
+            toolStripButton2.ImageTransparentColor = Color.Magenta;
+            toolStripButton2.Name = "toolStripButton2";
+            toolStripButton2.Size = new Size(23, 22);
+            toolStripButton2.Text = "toolStripButton2";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 16F);
@@ -635,7 +645,7 @@
             Controls.Add(launchButton);
             Controls.Add(mainTabControl);
             Name = "MainForm";
-            Text = "Nylon Configuration Tool - Vultumast";
+            Text = "Nylon Configuration Tool";
             Load += MainForm_Load;
             descriptionGroupBox.ResumeLayout(false);
             descriptionGroupBox.PerformLayout();
@@ -711,5 +721,6 @@
         private ToolStripButton checkForUpdatesToolStripButton;
         private ToolStripLabel infoTextToolStripLabel;
         private Button editButton;
+        private ToolStripButton toolStripButton2;
     }
 }

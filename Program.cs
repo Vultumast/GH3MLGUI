@@ -98,7 +98,21 @@ internal static class Program
         if (args.Length == 0)
         {
             if (!CheckPathExists(ModLoaderDirectory))
+            {
                 Directory.CreateDirectory(ModLoaderDirectory);
+
+                var msgResult = MessageBox.Show("Nylon was not detected in your Guitar Hero III folder, would you like to download and install Nylon now?", "No Nylon detected.", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                try
+                {
+                    UpdateStatus updateResult = Task.Run(async () => await UpdateManager.CheckForUpdates()).Result;
+                    UpdateManager.InstallUpdate();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"There was an error when installing Nylon, and the program will now exit.\n{ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return -1;
+                }
+            }
 
             if (!CheckPathExists(ModsDirectory))
                 Directory.CreateDirectory(ModsDirectory);

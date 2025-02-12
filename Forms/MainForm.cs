@@ -343,7 +343,13 @@ public partial class MainForm : Form
 
 
         if (updateResult == UpdateStatus.UpdateFound && result == DialogResult.Yes)
+        {
+            using InstallingUpdateForm form = new InstallingUpdateForm();
+            form.Show(this);
             UpdateManager.InstallUpdate();
+            MessageBox.Show(form, "Install Complete.");
+            form.Close();
+        }
 
     }
 

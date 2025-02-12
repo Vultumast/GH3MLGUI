@@ -57,36 +57,53 @@ public static class UpdateManager
         return UpdateStatus.UpdateFound;
     }
 
+    public static volatile bool InstallingComplete = true;
+
     public static void InstallUpdate()
     {
+        InstallingComplete = false;
+
         if (Releases is null)
         {
             Console.WriteLine("Unable to install an update. Releases was null!");
+            InstallingComplete = true;
             return;
         }
 
-        Console.WriteLine($"Installing update: {Releases[0].Name}");
+        try
+        {
+            Console.WriteLine($"Installing update: {Releases[0].Name}");
 
-        using HttpClient httpClient = new HttpClient();
-
-
-        httpClient.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("NylonGUI", "1"));
-
-        Console.WriteLine(Releases[0].Assets[0].BrowserDownloadUrl);
-
-        using Task<Stream>? stream = httpClient.GetStreamAsync(Releases[0].Assets[0].BrowserDownloadUrl);
-
-        var zipPath = Path.Combine(TemporaryManager.TempDirectory, "release.zip");
-
-        using FileStream fileStream = new(Path.Combine(zipPath), System.IO.FileMode.OpenOrCreate);
-        stream.Result.CopyTo(fileStream);
-
-        fileStream.Close();
-        stream.Result.Close();
+            using HttpClient httpClient = new HttpClient();
 
 
-        System.IO.Compression.ZipFile.ExtractToDirectory(zipPath, Common.Directories.GH3Directory);
+            httpClient.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("NylonGUI", "1"));
 
-        File.Delete(zipPath);
+            Console.WriteLine(Releases[0].Assets[0].BrowserDownloadUrl);
+
+            using Task<Stream>? stream = httpClient.GetStreamAsync(Releases[0].Assets[0].BrowserDownloadUrl);
+
+            var zipPath = Path.Combine(TemporaryManager.TempDirectory, "release.zip");
+
+            using FileStream fileStream = new(Path.Combine(zipPath), System.IO.FileMode.OpenOrCreate);
+            stream.Result.CopyTo(fileStream);
+
+            fileStream.Close();
+            stream.Result.Close();
+
+
+            System.IO.Compression.ZipFile.ExtractToDirectory(zipPath, Common.Directories.GH3Directory, true);
+
+            File.Delete(zipPath);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unable to install update: {ex}");
+        }
+        finally
+        {
+            InstallingComplete = true;
+            Console.WriteLine("Install complete.");
+        }
     }
 }

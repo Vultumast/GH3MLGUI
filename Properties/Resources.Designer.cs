@@ -73,6 +73,26 @@ namespace GH3MLGUI.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap conduit_tap_l {
+            get {
+                object obj = ResourceManager.GetObject("conduit_tap_l", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap conduit_tap_r {
+            get {
+                object obj = ResourceManager.GetObject("conduit_tap_r", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap EditInput_16x {
             get {
                 object obj = ResourceManager.GetObject("EditInput_16x", resourceCulture);
