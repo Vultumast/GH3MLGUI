@@ -29,7 +29,8 @@ internal static class Program
     public static string GuitarHero3SaveDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Aspyr\\Guitar Hero III\\");
     public static string VersionString => System.Reflection.Assembly.GetExecutingAssembly().GetName().Version!.ToString();
     public static NylonConfig Settings { get; private set; } = new();
-
+    public static NylonGUIConfig GUIConfig { get; private set; } = new();
+    
     // I stold this from https://stackoverflow.com/questions/1410127/c-sharp-test-if-user-has-write-access-to-a-folder
 
     /// <summary>
@@ -77,9 +78,32 @@ internal static class Program
     [STAThread]
     static int Main(string[] args)
     {
+        if (!File.Exists("config.json"))
+            NylonGUIConfig.Write(GUIConfig);
+        
+        GUIConfig = NylonGUIConfig.Read();
+
+        GH3Directory = GUIConfig.GH3Directory;
+        
         TemporaryManager.Init();
 
         Application.ApplicationExit += Application_ApplicationExit;
+
+        while(!Directory.Exists(GH3Directory))
+        {
+            MessageBox.Show($"Unable to find your Guitar Hero III directory, please select your exe.");
+
+            using (OpenFileDialog dlg = new OpenFileDialog())
+            {
+                dlg.Filter = "Executable File (*.exe)|*.exe";
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    GUIConfig.GH3Directory = Path.GetDirectoryName(dlg.FileName);
+                    GH3Directory = GUIConfig.GH3Directory;
+                }
+            }
+        }
+        
         if (!CanWriteToGH3Directory())
         {
             if (DisplayError("Your Guitar Hero 3 directory does not have Anonymous access rights, would you like them to be enabled?", MessageBoxButtons.YesNo) == DialogResult.Yes)
