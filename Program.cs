@@ -89,7 +89,10 @@ internal static class Program
 
         Application.ApplicationExit += Application_ApplicationExit;
         if (args.Length == 0)
-        {
+        {            
+            // To customize application configuration such as set high DPI settings or default font,
+            // see https://aka.ms/applicationconfiguration.
+            ApplicationConfiguration.Initialize();
             Application.SetCompatibleTextRenderingDefault(false);
 
             while (!Directory.Exists(GH3Directory))
@@ -149,9 +152,6 @@ internal static class Program
 
             Settings = NylonConfig.Read();
 
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
-            ApplicationConfiguration.Initialize();
             Application.Run(new Forms.MainForm());
 
             return (int)ErrorCode.ERROR_SUCCESS;
